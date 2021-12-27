@@ -3,24 +3,30 @@ import pandas as pd
 import numpy as np
 import requests
 
-st.sidebar.title("options")
+st.sidebar.title("Stock")
 op = st.sidebar.selectbox(
     "Which Dashboard?",
-    ("twitter","google","real estate"))
+    ("Twitter","Google","Pick Your Own Stock"),
+    2)
 
-st.header(op)
+st.header(op+" Daily Open/Close")
 
-
-
-if op == "google":
-    r = requests.get("https://api.polygon.io/v2/aggs/ticker/GOOGL/range/1/day/2020-06-01/2020-06-17?apiKey=2RsZzwKc4SWPGLSY861uPBABHgbF0kpa")
+if op == "Google":
+    r = requests.get("https://api.polygon.io/v1/open-close/GOOGL/2021-12-20?adjusted=true&apiKey=2RsZzwKc4SWPGLSY861uPBABHgbF0kpa")
     data = r.json()
     st.write(data)
-if op == "twitter":
-    r = requests.get("https://api.polygon.io/v2/aggs/ticker/TW/range/1/day/2020-06-01/2020-06-17?apiKey=2RsZzwKc4SWPGLSY861uPBABHgbF0kpa")
+    st.image("https://finviz.com/chart.ashx?t=GOOGL")
+if op == "Twitter":
+    r = requests.get("https://api.polygon.io/v1/open-close/TW/2021-12-20?adjusted=true&apiKey=2RsZzwKc4SWPGLSY861uPBABHgbF0kpa")
     data = r.json()
     st.write(data)
+    st.image("https://finviz.com/chart.ashx?t=TW")
+if op == "Pick Your Own Stock":
+    symbol = st.sidebar.text_input("Stock Symbol", value='AAPL',max_chars=10)
+    r = requests.get(f"https://api.polygon.io/v1/open-close/{symbol}/2021-12-20?adjusted=true&apiKey=2RsZzwKc4SWPGLSY861uPBABHgbF0kpa")
+    data = r.json()
+    st.write(data)
+    st.image(f"https://finviz.com/chart.ashx?t={symbol}")
+ 
 
 
-
-st.image("https://sp-ao.shortpixel.ai/client/q_glossy,ret_img/https://jingdaily.com/wp-content/uploads/2019/08/shutterstock_1033192045-1240x826.jpg")
